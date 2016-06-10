@@ -4,9 +4,9 @@ using Documental.Samples.Console.Documents;
 
 namespace Documental.Samples.Console
 {
-    public class CreationStrategy : DocumentDbCreationStrategy
+    public class SampleDocumentDbCreationStrategy : DocumentDbCreationStrategy
     {
-        public CreationStrategy()
+        public SampleDocumentDbCreationStrategy()
         {
             AddContributor(new DeleteDatabaseIfExistsContributor());
             AddContributor(new FromAttributesMappingContributor<PersonDocument>());

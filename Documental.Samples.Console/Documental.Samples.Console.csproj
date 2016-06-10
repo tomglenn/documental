@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreationStrategy.cs" />
+    <Compile Include="SampleDocumentDbCreationStrategy.cs" />
     <Compile Include="Documents\PersonDocument.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

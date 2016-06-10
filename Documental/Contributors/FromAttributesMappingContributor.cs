@@ -1,18 +1,17 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
-using Documental.Attributes;
-using Documental.Core.Config;
+using Documental.Config;
+using Documental.Extensions;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 
 namespace Documental.Contributors
 {
-    public sealed class FromAttributesMappingContributor<TDocument> : DocumentDbCreationStrategyContributor where TDocument : class 
+    public sealed class FromAttributesMappingContributor<TDocument> : DocumentDbCreationStrategyContributor where TDocument : Core.Document 
     {
-        public override async Task Contribute(DocumentClient client, IConfiguration configuration)
+        public override async Task Contribute(DocumentClient client, IDocumentDbConfiguration configuration)
         {
-            var attribute = (DocumentAttribute)Attribute.GetCustomAttribute(typeof(TDocument), typeof(DocumentAttribute));
+            var attribute = typeof (TDocument).GetDocumentAttribute();
             if (attribute == null)
             {
                 return;

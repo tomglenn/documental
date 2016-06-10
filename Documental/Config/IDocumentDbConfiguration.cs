@@ -1,6 +1,6 @@
-﻿namespace Documental.Core.Config
+﻿namespace Documental.Config
 {
-    public interface IConfiguration
+    public interface IDocumentDbConfiguration
     {
         string EndpointUri { get; set; }
         string Key { get; set; }

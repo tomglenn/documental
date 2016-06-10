@@ -1,18 +1,12 @@
-﻿using System;
-using Documental.Attributes;
+﻿using Documental.Attributes;
+using Documental.Core;
 
 namespace Documental.Samples.Console.Documents
 {
-    [Document(CollectionName = "people")]
-    public class PersonDocument
+    [DocumentType(CollectionName = "people")]
+    public class PersonDocument : Document
     {
-        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
-        public PersonDocument()
-        {
-            Id = Guid.NewGuid().ToString();
-        }
     }
 }

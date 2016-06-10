@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Documental.Core.Config;
+using Documental.Config;
 
 namespace Documental.Core
 {
     public interface IDocumentDbCreationStrategy
     {
-        Task Create(IConfiguration configuration);
+        Task Create(IDocumentDbConfiguration configuration);
     }
 }

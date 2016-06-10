@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
 using System.Threading.Tasks;
-using Configuration = Documental.Core.Config.Configuration;
+using Documental.Config;
+using Documental.Core;
+using Documental.Samples.Console.Documents;
 
 namespace Documental.Samples.Console
 {
@@ -17,12 +19,22 @@ namespace Documental.Samples.Console
             var key = ConfigurationManager.AppSettings["Documental:Key"];
             var databaseName = ConfigurationManager.AppSettings["Documental:DatabaseName"];
 
-            var configuration = new Configuration(endpointUri, key, databaseName);
+            var configuration = new DocumentDbConfiguration(endpointUri, key, databaseName);
 
-            var creationStategy = new CreationStrategy();
+            var creationStategy = new SampleDocumentDbCreationStrategy();
             await creationStategy.Create(configuration);
+            
+            var repository = new DocumentRepository(configuration);
+            var person = new PersonDocument
+            {
+                FirstName = "Foo",
+                LastName = "Glenn"
+            };
 
-            System.Console.WriteLine("Created database '{0}'", configuration.DatabaseName);
+            await repository.Save(person);
+
+            System.Console.WriteLine("All done!");
+
             System.Console.ReadKey();
         }
     }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Documental.Config;
 using Documental.Contributors;
-using Documental.Core.Config;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 
@@ -12,7 +12,7 @@ namespace Documental.Core
     {
         private readonly IList<IDocumentDbCreationStrategyContributor> contributors = new List<IDocumentDbCreationStrategyContributor>();
           
-        public async Task Create(IConfiguration configuration)
+        public async Task Create(IDocumentDbConfiguration configuration)
         {
             var client = DocumentClientFactory.Create(configuration);
 
@@ -27,7 +27,7 @@ namespace Documental.Core
             contributors.Add(contributor);
         }
 
-        private async Task OnPreCreate(DocumentClient client, IConfiguration configuration)
+        private async Task OnPreCreate(DocumentClient client, IDocumentDbConfiguration configuration)
         {
             foreach (var contributor in contributors)
             {
@@ -35,7 +35,7 @@ namespace Documental.Core
             }
         }
 
-        private async Task CreateDatabase(DocumentClient client, IConfiguration configuration)
+        private async Task CreateDatabase(DocumentClient client, IDocumentDbConfiguration configuration)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Documental.Core
             }
         }
 
-        private async Task Contribute(DocumentClient client, IConfiguration configuration)
+        private async Task Contribute(DocumentClient client, IDocumentDbConfiguration configuration)
         {
             foreach (var contributor in contributors)
             {
@@ -58,7 +58,7 @@ namespace Documental.Core
             }
         }
 
-        private async Task OnPostCreate(DocumentClient client, IConfiguration configuration)
+        private async Task OnPostCreate(DocumentClient client, IDocumentDbConfiguration configuration)
         {
             foreach (var contributor in contributors)
             {
