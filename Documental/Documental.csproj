@@ -11,6 +11,8 @@
     <AssemblyName>Documental</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,7 +53,14 @@
     <Compile Include="Attributes\DocumentAttribute.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\IConfiguration.cs" />
+    <Compile Include="Contributors\DocumentDbCreationStrategyContributor.cs" />
+    <Compile Include="Contributors\DeleteDatabaseIfExistsContributor.cs" />
+    <Compile Include="Contributors\FromAttributesMappingContributor.cs" />
+    <Compile Include="Core\DocumentClientFactory.cs" />
+    <Compile Include="Core\DocumentDbCreationStrategy.cs" />
     <Compile Include="Core\DocumentRepository.cs" />
+    <Compile Include="Core\IDocumentDbCreationStrategy.cs" />
+    <Compile Include="Contributors\IDocumentDbCreationStrategyContributor.cs" />
     <Compile Include="Core\IDocumentRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
