@@ -7,7 +7,7 @@ using Microsoft.Azure.Documents.Client;
 
 namespace Documental.Contributors
 {
-    public sealed class FromAttributesMappingContributor<TDocument> : DocumentDbCreationStrategyContributor where TDocument : Core.Document 
+    public sealed class FromAttributesMappingContributor<TDocument> : DocumentDbCreationStrategyContributor where TDocument : Document 
     {
         public override async Task Contribute(DocumentClient client, IDocumentDbConfiguration configuration)
         {

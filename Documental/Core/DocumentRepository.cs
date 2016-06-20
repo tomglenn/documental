@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Documental.Config;
 using Documental.Extensions;
+using Documental.Queries;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 
@@ -19,6 +21,30 @@ namespace Documental.Core
             client = DocumentClientFactory.Create(configuration);
         }
 
+        public async Task<T> FindById<T>(string id) where T : Document
+        {
+            var documentUri = GetDocumentUri<T>(id);
+            var response = await client.ReadDocumentAsync(documentUri);
+            
+            return response.Resource as T;
+        }
+
+        public T Query<T>(SingleDocumentQuery<T> query) where T : Document
+        {
+            var documentCollectionUri = GetDocumentCollectionUri<T>();
+            var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
+
+            return query.Execute(queryable);
+        }
+
+        public IEnumerable<T> Query<T>(MultipleDocumentQuery<T> query) where T : Document
+        {
+            var documentCollectionUri = GetDocumentCollectionUri<T>();
+            var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
+
+            return query.Execute(queryable);
+        }
+
         public async Task Save<T>(T document) where T : Document
         {
             var documentAttribute = typeof(T).GetDocumentAttribute();
@@ -27,8 +53,8 @@ namespace Documental.Core
                 throw new InvalidOperationException("The object you are trying to save must be decorated with the Document attribute");
             }
 
-            var documentUri = UriFactory.CreateDocumentUri(configuration.DatabaseName, documentAttribute.CollectionName, document.Id);
-            var documentCollectionUri = UriFactory.CreateDocumentCollectionUri(configuration.DatabaseName, documentAttribute.CollectionName);
+            var documentUri = GetDocumentUri<T>(document.Id);
+            var documentCollectionUri = GetDocumentCollectionUri<T>();
 
             try
             {
@@ -45,6 +71,33 @@ namespace Documental.Core
                     await client.CreateDocumentAsync(documentCollectionUri, document);
                 }
             }
+        }
+
+        public Task Delete<T>(T document) where T : Document
+        {
+            throw new NotImplementedException();
+        }
+
+        private Uri GetDocumentCollectionUri<T>() where T : Document
+        {
+            var documentAttribute = typeof(T).GetDocumentAttribute();
+            if (documentAttribute == null)
+            {
+                throw new InvalidOperationException("The object you are trying to save must be decorated with the Document attribute");
+            }
+            
+            return UriFactory.CreateDocumentCollectionUri(configuration.DatabaseName, documentAttribute.CollectionName);
+        }
+
+        private Uri GetDocumentUri<T>(string id)
+        {
+            var documentAttribute = typeof(T).GetDocumentAttribute();
+            if (documentAttribute == null)
+            {
+                throw new InvalidOperationException("The object you are trying to save must be decorated with the Document attribute");
+            }
+
+            return UriFactory.CreateDocumentUri(configuration.DatabaseName, documentAttribute.CollectionName, id);
         }
     }
 }
