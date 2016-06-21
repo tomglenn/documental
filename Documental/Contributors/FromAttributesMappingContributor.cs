@@ -11,7 +11,7 @@ namespace Documental.Contributors
     {
         public override async Task Contribute(DocumentClient client, IDocumentDbConfiguration configuration)
         {
-            var attribute = typeof (TDocument).GetDocumentAttribute();
+            var attribute = typeof (TDocument).GetDocumentTypeAttribute();
             if (attribute == null)
             {
                 return;

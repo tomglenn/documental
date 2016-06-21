@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Documental.Attributes;
 using Documental.Config;
 using Documental.Extensions;
 using Documental.Queries;
@@ -47,12 +48,6 @@ namespace Documental.Core
 
         public async Task Save<T>(T document) where T : Document
         {
-            var documentAttribute = typeof(T).GetDocumentAttribute();
-            if (documentAttribute == null)
-            {
-                throw new InvalidOperationException("The object you are trying to save must be decorated with the Document attribute");
-            }
-
             var documentUri = GetDocumentUri<T>(document.Id);
             var documentCollectionUri = GetDocumentCollectionUri<T>();
 
@@ -81,24 +76,25 @@ namespace Documental.Core
 
         private Uri GetDocumentCollectionUri<T>() where T : Document
         {
-            var documentAttribute = typeof(T).GetDocumentAttribute();
-            if (documentAttribute == null)
-            {
-                throw new InvalidOperationException("The object you are trying to save must be decorated with the Document attribute");
-            }
-            
+            var documentAttribute = GetDocumentTypeAttribute<T>();
             return UriFactory.CreateDocumentCollectionUri(configuration.DatabaseName, documentAttribute.CollectionName);
         }
 
-        private Uri GetDocumentUri<T>(string id)
+        private Uri GetDocumentUri<T>(string id) where T : Document
         {
-            var documentAttribute = typeof(T).GetDocumentAttribute();
-            if (documentAttribute == null)
+            var documentAttribute = GetDocumentTypeAttribute<T>();
+            return UriFactory.CreateDocumentUri(configuration.DatabaseName, documentAttribute.CollectionName, id);
+        }
+
+        private DocumentTypeAttribute GetDocumentTypeAttribute<T>() where T : Document
+        {
+            var documentTypeAttribute = typeof(T).GetDocumentTypeAttribute();
+            if (documentTypeAttribute == null)
             {
-                throw new InvalidOperationException("The object you are trying to save must be decorated with the Document attribute");
+                throw new InvalidOperationException("Document entities must be decorated with the DocumentType attribute");
             }
 
-            return UriFactory.CreateDocumentUri(configuration.DatabaseName, documentAttribute.CollectionName, id);
+            return documentTypeAttribute;
         }
     }
 }

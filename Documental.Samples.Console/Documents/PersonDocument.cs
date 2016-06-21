@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Documental.Samples.Console.Documents
 {
-    [DocumentType(CollectionName = "people")]
+    [DocumentType("people")]
     public class PersonDocument : Document
     {
         [JsonProperty(PropertyName = "firstName")]

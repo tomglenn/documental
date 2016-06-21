@@ -97,7 +97,7 @@ namespace Documental.Samples.Console
             }
             else
             {
-                System.Console.WriteLine("Didn't find anyone with surname Glenn");
+                System.Console.WriteLine("Didn't find anyone with surname Bar");
             }
 
             System.Console.WriteLine("");
