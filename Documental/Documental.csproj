@@ -56,6 +56,7 @@
     <Compile Include="Contributors\DocumentDbCreationStrategyContributor.cs" />
     <Compile Include="Contributors\DeleteDatabaseIfExistsContributor.cs" />
     <Compile Include="Contributors\FromAttributesMappingContributor.cs" />
+    <Compile Include="Core\AbstractDocument.cs" />
     <Compile Include="Core\DocumentClientFactory.cs" />
     <Compile Include="Core\DocumentDbCreationStrategy.cs" />
     <Compile Include="Core\DocumentRepository.cs" />

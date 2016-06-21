@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using Documental.Attributes;
@@ -30,6 +32,14 @@ namespace Documental.Core
             return response.Resource as T;
         }
 
+        public T FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : Document
+        {
+            var documentCollectionUri = GetDocumentCollectionUri<T>();
+            var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
+
+            return queryable.Where(predicate).AsEnumerable().FirstOrDefault();
+        }
+
         public T Query<T>(SingleDocumentQuery<T> query) where T : Document
         {
             var documentCollectionUri = GetDocumentCollectionUri<T>();
@@ -44,6 +54,14 @@ namespace Documental.Core
             var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
 
             return query.Execute(queryable);
+        }
+
+        public IQueryable<T> Where<T>(Expression<Func<T, bool>> predicate) where T : Document
+        {
+            var documentCollectionUri = GetDocumentCollectionUri<T>();
+            var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
+
+            return queryable.Where(predicate);
         }
 
         public async Task Save<T>(T document) where T : Document
