@@ -73,9 +73,10 @@ namespace Documental.Core
             }
         }
 
-        public Task Delete<T>(T document) where T : Document
+        public async Task Delete<T>(T document) where T : Document
         {
-            throw new NotImplementedException();
+            var documentUri = GetDocumentUri<T>(document.Id);
+            await client.DeleteDocumentAsync(documentUri);
         }
 
         private Uri GetDocumentCollectionUri<T>() where T : Document

@@ -16,26 +16,62 @@ namespace Documental.Samples.Console
 
         static async Task MainAsync()
         {
+            var configuration = CreateConfiguration();
+            var repository = new DocumentRepository(configuration);
+            
+            await CreateDatabase(configuration);
+            await CreatePeople(repository);
+
+            FindPersonCalledTom(repository);
+            FindPeopleWithSurnameBar(repository);
+            DeletePersonCalledJess(repository);
+            FindPeopleWithSurnameBar(repository);
+
+            System.Console.WriteLine("All done!");
+            System.Console.ReadKey();
+        }
+
+        private static IDocumentDbConfiguration CreateConfiguration()
+        {
             var endpointUri = ConfigurationManager.AppSettings["Documental:EndpointUri"];
             var key = ConfigurationManager.AppSettings["Documental:Key"];
             var databaseName = ConfigurationManager.AppSettings["Documental:DatabaseName"];
 
-            var configuration = new DocumentDbConfiguration(endpointUri, key, databaseName);
+            return new DocumentDbConfiguration(endpointUri, key, databaseName);
+        }
 
+        private static async Task CreateDatabase(IDocumentDbConfiguration configuration)
+        {
             var creationStategy = new SampleDocumentDbCreationStrategy();
             await creationStategy.Create(configuration);
+        }
 
-            var repository = new DocumentRepository(configuration);
-
+        private static async Task CreatePeople(IDocumentRepository repository)
+        {
             await SavePerson(repository, "John", "Smith");
             await SavePerson(repository, "Tom", "Bar");
             await SavePerson(repository, "Jess", "Bar");
             await SavePerson(repository, "Foo", "Bar");
+            System.Console.WriteLine("");
+        }
 
-            System.Console.WriteLine("Saved 3 people");
+        private static async Task SavePerson(IDocumentRepository repository, string firstName, string lastName)
+        {
+            var person = new PersonDocument
+            {
+                FirstName = firstName,
+                LastName = lastName
+            };
 
+            await repository.Save(person);
+
+            System.Console.WriteLine("Created person {0} {1}", firstName, lastName);
+        }
+
+        private static void FindPersonCalledTom(IDocumentRepository repository)
+        {
             System.Console.WriteLine("Finding person called Tom");
-            var person = repository.Query(new PersonCalledTomQuery());
+            var person = repository.Query(new FindPersonByNameQuery("Tom"));
             if (person != null)
             {
                 System.Console.WriteLine("Found {0} {1}", person.FirstName, person.LastName);
@@ -45,8 +81,13 @@ namespace Documental.Samples.Console
                 System.Console.WriteLine("Didn't find a person called Tom");
             }
 
-            System.Console.WriteLine("Finding people with surname Glenn");
-            var people = repository.Query(new PeopleWithSurnameBarQuery());
+            System.Console.WriteLine("");
+        }
+
+        private static void FindPeopleWithSurnameBar(IDocumentRepository repository)
+        {
+            System.Console.WriteLine("Finding people with surname Bar");
+            var people = repository.Query(new FindPeopleBySurnameQuery("Bar"));
             if (people != null)
             {
                 foreach (var p in people)
@@ -59,20 +100,24 @@ namespace Documental.Samples.Console
                 System.Console.WriteLine("Didn't find anyone with surname Glenn");
             }
 
-            System.Console.WriteLine("All done!");
-
-            System.Console.ReadKey();
+            System.Console.WriteLine("");
         }
 
-        private static async Task SavePerson(DocumentRepository repository, string firstName, string lastName)
+        private static void DeletePersonCalledJess(IDocumentRepository repository)
         {
-            var person = new PersonDocument
+            System.Console.WriteLine("Deleting person called Jess");
+            var jess = repository.Query(new FindPersonByNameQuery("Jess"));
+            if (jess != null)
             {
-                FirstName = firstName,
-                LastName = lastName
-            };
+                repository.Delete(jess);
+                System.Console.WriteLine("Deleted Jess");
+            }
+            else
+            {
+                System.Console.WriteLine("Could not find a person called Jess");
+            }
 
-            await repository.Save(person);
+            System.Console.WriteLine("");
         }
     }
 }

@@ -54,8 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Queries\PeopleWithSurnameBarQuery.cs" />
-    <Compile Include="Queries\PersonCalledTomQuery.cs" />
+    <Compile Include="Queries\FindPeopleBySurnameQuery.cs" />
+    <Compile Include="Queries\FindPersonByNameQuery.cs" />
     <Compile Include="SampleDocumentDbCreationStrategy.cs" />
     <Compile Include="Documents\PersonDocument.cs" />
     <Compile Include="Program.cs" />
