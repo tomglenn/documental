@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Documental")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A slick and easy to use Azure DocumentDB helper library")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Tom Glenn")]
 [assembly: AssemblyProduct("Documental")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
