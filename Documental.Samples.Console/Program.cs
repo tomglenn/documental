@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Threading.Tasks;
 using Documental.Config;
 using Documental.Core;
@@ -26,7 +27,7 @@ namespace Documental.Samples.Console
             FindPeopleWithSurnameBar(repository);
             DeletePersonCalledJess(repository);
             FindPeopleWithSurnameBar(repository);
-
+            
             System.Console.WriteLine("All done!");
             System.Console.ReadKey();
         }
