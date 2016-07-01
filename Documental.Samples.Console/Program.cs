@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Threading;
 using System.Threading.Tasks;
 using Documental.Config;
 using Documental.Core;
@@ -21,13 +22,14 @@ namespace Documental.Samples.Console
             var repository = new DocumentRepository(configuration);
             
             await CreateDatabase(configuration);
+
             await CreatePeople(repository);
 
             FindPersonCalledTom(repository);
             FindPeopleWithSurnameBar(repository);
             DeletePersonCalledJess(repository);
             FindPeopleWithSurnameBar(repository);
-            
+
             System.Console.WriteLine("All done!");
             System.Console.ReadKey();
         }

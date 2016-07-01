@@ -24,12 +24,9 @@ namespace Documental.Core
             client = DocumentClientFactory.Create(configuration);
         }
 
-        public async Task<T> FindById<T>(string id) where T : Document
+        public T FindById<T>(string id) where T : Document
         {
-            var documentUri = GetDocumentUri<T>(id);
-            var response = await client.ReadDocumentAsync(documentUri);
-            
-            return response.Resource as T;
+            return FirstOrDefault<T>(x => x.Id == id);
         }
 
         public T FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : Document

@@ -10,7 +10,7 @@ namespace Documental.Core
 {
     public interface IDocumentRepository
     {
-        Task<T> FindById<T>(string id) where T : Document;
+        T FindById<T>(string id) where T : Document;
         T FirstOrDefault<T>(Expression<Func<T, bool>>  predicate) where T : Document;
         T Query<T>(SingleDocumentQuery<T> query) where T : Document;
         IEnumerable<T> Query<T>(MultipleDocumentQuery<T> query) where T : Document;
