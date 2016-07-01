@@ -56,12 +56,12 @@ namespace Documental.Core
             return query.Execute(queryable);
         }
 
-        public IQueryable<T> Where<T>(Expression<Func<T, bool>> predicate) where T : Document
+        public IQueryable<T> Query<T>() where T : Document
         {
             var documentCollectionUri = GetDocumentCollectionUri<T>();
             var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
 
-            return queryable.Where(predicate);
+            return queryable;
         }
 
         public async Task Save<T>(T document) where T : Document
