@@ -1,17 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Azure.Documents;
 
 namespace Documental.Queries
 {
-    public class MultipleDocumentQuery<T> where T : Document
+    public abstract class MultipleDocumentQuery<T> where T : Document
     {
-        protected virtual IEnumerable<T> ExecuteQuery(IOrderedQueryable<T> query)
-        {
-            return query;
-        }
+        protected abstract IQueryable<T> ExecuteQuery(IOrderedQueryable<T> query);
 
-        public IEnumerable<T> Execute(IOrderedQueryable<T> query)
+        public IQueryable<T> Execute(IOrderedQueryable<T> query)
+        {
+            return ExecuteQuery(query);
+        }
+    }
+
+    public abstract class MultipleDocumentQuery<T, TReturn> where T : Document
+    {
+        protected abstract IQueryable<TReturn> ExecuteQuery(IOrderedQueryable<T> query);
+
+        public IQueryable<TReturn> Execute(IOrderedQueryable<T> query)
         {
             return ExecuteQuery(query);
         }

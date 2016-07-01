@@ -3,12 +3,9 @@ using Microsoft.Azure.Documents;
 
 namespace Documental.Queries
 {
-    public class SingleDocumentQuery<T> where T : Document
+    public abstract class SingleDocumentQuery<T> where T : Document
     {
-        protected virtual T ExecuteQuery(IOrderedQueryable<T> query)
-        {
-            return query.FirstOrDefault();
-        }
+        protected abstract T ExecuteQuery(IOrderedQueryable<T> query);
 
         public T Execute(IOrderedQueryable<T> query)
         {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Documental.Queries;
 using Documental.Samples.Console.Documents;
 
@@ -14,7 +13,7 @@ namespace Documental.Samples.Console.Queries
             this.surname = surname;
         }
 
-        protected override IEnumerable<PersonDocument> ExecuteQuery(IOrderedQueryable<PersonDocument> query)
+        protected override IQueryable<PersonDocument> ExecuteQuery(IOrderedQueryable<PersonDocument> query)
         {
             return query.Where(x => x.LastName == surname);
         }

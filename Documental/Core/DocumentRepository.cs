@@ -56,6 +56,14 @@ namespace Documental.Core
             return query.Execute(queryable);
         }
 
+        public IEnumerable<TReturn> Query<T, TReturn>(MultipleDocumentQuery<T, TReturn> query) where T : Document
+        {
+            var documentCollectionUri = GetDocumentCollectionUri<T>();
+            var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
+
+            return query.Execute(queryable);
+        }
+
         public IQueryable<T> Query<T>() where T : Document
         {
             var documentCollectionUri = GetDocumentCollectionUri<T>();
