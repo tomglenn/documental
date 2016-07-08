@@ -71,24 +71,8 @@ namespace Documental.Core
 
         public async Task Save<T>(T document) where T : Document
         {
-            var documentUri = GetDocumentUri<T>(document.Id);
             var documentCollectionUri = GetDocumentCollectionUri<T>();
-
-            try
-            {
-                var response = await client.ReadDocumentAsync(documentUri);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    await client.ReplaceDocumentAsync(documentUri, document);
-                }
-            }
-            catch (DocumentClientException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NotFound)
-                {
-                    await client.CreateDocumentAsync(documentCollectionUri, document);
-                }
-            }
+            await client.UpsertDocumentAsync(documentCollectionUri, document);
         }
 
         public async Task Delete<T>(T document) where T : Document
