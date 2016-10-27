@@ -4,16 +4,23 @@ using Microsoft.Azure.Documents;
 
 namespace Documental.Queries
 {
-    public class MultipleDocumentQuery<T> where T : Document
+    public abstract class MultipleDocumentQuery<T> where T : Document
     {
-        protected virtual IEnumerable<T> ExecuteQuery(IOrderedQueryable<T> query)
-        {
-            return query;
-        }
+        protected abstract IEnumerable<T> ExecuteQuery(IOrderedQueryable<T> query);
 
         public IEnumerable<T> Execute(IOrderedQueryable<T> query)
         {
-            return ExecuteQuery(query);
+            return ExecuteQuery(query).AsEnumerable();
+        }
+    }
+
+    public abstract class MultipleDocumentQuery<T, TReturn> where T : Document
+    {
+        protected abstract IEnumerable<TReturn> ExecuteQuery(IOrderedQueryable<T> query);
+
+        public IEnumerable<TReturn> Execute(IOrderedQueryable<T> query)
+        {
+            return ExecuteQuery(query).AsEnumerable();
         }
     }
 }

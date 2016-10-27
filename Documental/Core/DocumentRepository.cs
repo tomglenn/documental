@@ -24,12 +24,9 @@ namespace Documental.Core
             client = DocumentClientFactory.Create(configuration);
         }
 
-        public async Task<T> FindById<T>(string id) where T : Document
+        public T FindById<T>(string id) where T : Document
         {
-            var documentUri = GetDocumentUri<T>(id);
-            var response = await client.ReadDocumentAsync(documentUri);
-            
-            return response.Resource as T;
+            return FirstOrDefault<T>(x => x.Id == id);
         }
 
         public T FirstOrDefault<T>(Expression<Func<T, bool>> predicate) where T : Document
@@ -53,37 +50,29 @@ namespace Documental.Core
             var documentCollectionUri = GetDocumentCollectionUri<T>();
             var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
 
-            return query.Execute(queryable);
+            return query.Execute(queryable).AsEnumerable().ToList();
         }
 
-        public IQueryable<T> Where<T>(Expression<Func<T, bool>> predicate) where T : Document
+        public IEnumerable<TReturn> Query<T, TReturn>(MultipleDocumentQuery<T, TReturn> query) where T : Document
         {
             var documentCollectionUri = GetDocumentCollectionUri<T>();
             var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
 
-            return queryable.Where(predicate);
+            return query.Execute(queryable).AsEnumerable().ToList();
+        }
+
+        public IQueryable<T> Query<T>() where T : Document
+        {
+            var documentCollectionUri = GetDocumentCollectionUri<T>();
+            var queryable = client.CreateDocumentQuery<T>(documentCollectionUri);
+
+            return queryable;
         }
 
         public async Task Save<T>(T document) where T : Document
         {
-            var documentUri = GetDocumentUri<T>(document.Id);
             var documentCollectionUri = GetDocumentCollectionUri<T>();
-
-            try
-            {
-                var response = await client.ReadDocumentAsync(documentUri);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    await client.ReplaceDocumentAsync(documentUri, document);
-                }
-            }
-            catch (DocumentClientException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.NotFound)
-                {
-                    await client.CreateDocumentAsync(documentCollectionUri, document);
-                }
-            }
+            await client.UpsertDocumentAsync(documentCollectionUri, document);
         }
 
         public async Task Delete<T>(T document) where T : Document
