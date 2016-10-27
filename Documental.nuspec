@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Documental</id>
+        <version>1.7.2</version>
+        <title>Documental</title>
+        <authors>Tom Glenn</authors>
+        <owners>Tom Glenn</owners>
+        <projectUrl>http://github.com/tomeglenn/documental</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A slick and easy to use Azure DocumentDB helper library</description>
+        <copyright>Copyright 2016</copyright>
+        <tags>Azure DocumentDB</tags>
+        <dependencies>
+            <dependency id="Microsoft.Azure.DocumentDB" version="1.10.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="Documental\bin\Release\Documental.dll" target="lib\net46\Documental.dll" />
+    </files>
+</package>
